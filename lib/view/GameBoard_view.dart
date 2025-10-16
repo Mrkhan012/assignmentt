@@ -7,91 +7,97 @@ import 'package:flutter/material.dart';
 import 'package:ludo/provider/game_board_provider.dart';
 import 'package:ludo/view/widget/RingsPainter.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GameBoardScreen extends StatelessWidget {
   const GameBoardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => GameBoardProvider(),
-      child: Consumer<GameBoardProvider>(
-        builder: (_, provider, __) {
-          return Scaffold(
-            body: Stack(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/backgoud.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Positioned.fill(
-                  child: ImageFiltered(
-                    imageFilter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-                    child: Container(color: Colors.black.withOpacity(0.45)),
-                  ),
-                ),
-                SafeArea(
-                  child: Column(
-                    children: [
-                      _buildTopBar(),
-                      const SizedBox(height: 12),
-                      Expanded(
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            final boardSize = min(
-                              constraints.maxWidth - 40,
-                              constraints.maxHeight * 0.62,
-                            );
-                            return Column(
-                              children: [
-                                Center(
-                                  child: _buildBoardArea(provider, boardSize),
-                                ),
-                                const SizedBox(height: 12),
-                                _buildDiceAndTimerArea(provider),
-                                const Spacer(),
-                                _buildBottomEmojiBar(context),
-                              ],
-                            );
-                          },
+    return ScreenUtilInit(
+      designSize: const Size(360, 690), 
+      builder: (context, child) {
+        return ChangeNotifierProvider(
+          create: (_) => GameBoardProvider(),
+          child: Consumer<GameBoardProvider>(
+            builder: (_, provider, __) {
+              return Scaffold(
+                body: Stack(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/backgoud.png'),
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Positioned.fill(
+                      child: ImageFiltered(
+                        imageFilter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                        child: Container(color: Colors.black.withOpacity(0.45)),
+                      ),
+                    ),
+                    SafeArea(
+                      child: Column(
+                        children: [
+                          _buildTopBar(),
+                          SizedBox(height: 12.h),
+                          Expanded(
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                final boardSize = min(
+                                  constraints.maxWidth - 40.w,
+                                  constraints.maxHeight * 0.62,
+                                );
+                                return Column(
+                                  children: [
+                                    Center(
+                                      child: _buildBoardArea(provider, boardSize),
+                                    ),
+                                    SizedBox(height: 12.h),
+                                    _buildDiceAndTimerArea(provider),
+                                    const Spacer(),
+                                    _buildBottomEmojiBar(context),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
   Widget _buildTopBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.25),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
             ),
             child: Row(
-              children: const [
-                Icon(Icons.emoji_events, color: Colors.amber, size: 18),
-                SizedBox(width: 6),
+              children: [
+                Icon(Icons.emoji_events, color: Colors.amber, size: 18.sp),
+                SizedBox(width: 6.w),
                 Text(
                   '350',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
+                    fontSize: 14.sp,
                   ),
                 ),
               ],
@@ -101,20 +107,20 @@ class GameBoardScreen extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(6),
+                padding: EdgeInsets.all(6.w),
                 decoration: BoxDecoration(
                   color: Colors.white24,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Image.asset(
                   'assets/images/dice.png',
-                  width: 28,
-                  height: 28,
+                  width: 28.w,
+                  height: 28.h,
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               CircleAvatar(
-                radius: 18,
+                radius: 18.r,
                 backgroundImage: AssetImage('assets/images/avatar1.png'),
               ),
             ],
@@ -126,13 +132,13 @@ class GameBoardScreen extends StatelessWidget {
 
   Widget _buildBoardArea(GameBoardProvider provider, double size) {
     return Container(
-      width: size,
-      height: size,
-      padding: const EdgeInsets.all(10),
+      width: size.w,
+      height: size.h,
+      padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         color: Colors.transparent,
-        border: Border.all(color: Colors.orange.shade700, width: 6),
+        border: Border.all(color: Colors.orange.shade700, width: 6.w),
       ),
       child: Stack(
         children: [
@@ -143,16 +149,20 @@ class GameBoardScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 8,
-            right: 12,
+            top: 8.h,
+            right: 12.w,
             child: _playerMiniCard('Nirmal', 'assets/images/profile.png'),
           ),
           Positioned(
-            bottom: 8,
-            left: 12,
+            bottom: 8.h,
+            left: 12.w,
             child: _playerMiniCard('Anika', 'assets/images/profile.png'),
           ),
-          Positioned(bottom: 8, right: 12, child: _powerUpCard()),
+          Positioned(
+            bottom: 8.h,
+            right: 12.w,
+            child: _powerUpCard(),
+          ),
           Positioned.fill(
             child: CustomPaint(
               painter: TokenPainter(tokenPos: provider.tokenPos),
@@ -165,18 +175,18 @@ class GameBoardScreen extends StatelessWidget {
 
   Widget _playerMiniCard(String name, String avatarAsset) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.36),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(
         children: [
-          Image.asset('assets/images/dice.png', width: 20, height: 20),
-          const SizedBox(width: 8),
-          CircleAvatar(radius: 14, backgroundImage: AssetImage(avatarAsset)),
-          const SizedBox(width: 8),
-          Text(name, style: const TextStyle(color: Colors.white, fontSize: 12)),
+          Image.asset('assets/images/dice.png', width: 20.w, height: 20.h),
+          SizedBox(width: 8.w),
+          CircleAvatar(radius: 14.r, backgroundImage: AssetImage(avatarAsset)),
+          SizedBox(width: 8.w),
+          Text(name, style: TextStyle(color: Colors.white, fontSize: 12.sp)),
         ],
       ),
     );
@@ -184,18 +194,18 @@ class GameBoardScreen extends StatelessWidget {
 
   Widget _powerUpCard() {
     return Container(
-      padding: const EdgeInsets.all(6),
+      padding: EdgeInsets.all(6.w),
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.36),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(8.r),
       ),
       child: Row(
         children: [
-          Image.asset('assets/images/dice.png', width: 22, height: 22),
-          const SizedBox(width: 8),
-          const Text(
+          Image.asset('assets/images/dice.png', width: 22.w, height: 22.h),
+          SizedBox(width: 8.w),
+          Text(
             '4 Power Up',
-            style: TextStyle(color: Colors.white, fontSize: 12),
+            style: TextStyle(color: Colors.white, fontSize: 12.sp),
           ),
         ],
       ),
@@ -206,10 +216,10 @@ class GameBoardScreen extends StatelessWidget {
     final emojis = ['😎', '🎁', '😄', '😂', '😒', '😍'];
     return Container(
       color: Colors.transparent,
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: EdgeInsets.symmetric(vertical: 12.h),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
         child: Row(
           children: [
             for (var e in emojis)
@@ -221,15 +231,15 @@ class GameBoardScreen extends StatelessWidget {
                   ),
                 ),
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  width: 56,
-                  height: 56,
+                  margin: EdgeInsets.symmetric(horizontal: 8.w),
+                  width: 56.w,
+                  height: 56.h,
                   decoration: BoxDecoration(
                     color: Colors.white24,
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(30.r),
                   ),
                   child: Center(
-                    child: Text(e, style: const TextStyle(fontSize: 28)),
+                    child: Text(e, style: TextStyle(fontSize: 28.sp)),
                   ),
                 ),
               ),
@@ -246,30 +256,27 @@ class GameBoardScreen extends StatelessWidget {
           onPressed: provider.rollDice,
           style: ElevatedButton.styleFrom(
             shape: const CircleBorder(),
-            padding: const EdgeInsets.all(18),
+            padding: EdgeInsets.all(18.w),
             backgroundColor: Colors.redAccent,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset('assets/images/bottomm.png', width: 48, height: 48),
-              const SizedBox(height: 4),
+              Image.asset('assets/images/bottomm.png', width: 48.w, height: 48.h),
+              SizedBox(height: 4.h),
               Text(
                 provider.lastDice == 0 ? 'Roll' : provider.lastDice.toString(),
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         Text(
           'Turn: ${provider.currentTurn[0].toUpperCase()}${provider.currentTurn.substring(1)}',
-          style: const TextStyle(color: Colors.white70),
+          style: TextStyle(color: Colors.white70, fontSize: 14.sp),
         ),
       ],
     );
   }
 }
-
-
-
